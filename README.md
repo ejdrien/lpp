@@ -1,5 +1,5 @@
 ### Python List Processing (PLP)
-#### Definice
+#### Definice
 **Python List Processing** (dále jako **PLP**) je pokus o vytvoření interpretu vlastního dialektu LISPu.
 
 Výsledkem je program, který je schopný pracovat s předem zadefinovanou syntaxí, zpracovat jednotlivé výrazy, ukládat proměnné, definovat funkce, ...
