@@ -1,0 +1,31 @@
+(load-file "examples/fibonacci_definition.plp")
+
+(define ns-to-s
+  (fn (ms)
+    (/ ms 1e9)))
+
+(define time-elapsed
+  (fn (starting_time)
+    (ns-to-s (- (time) starting_time))))
+
+(define N 22)
+(println "calculating" (str N "-th fibonacci number"))
+
+(define start (time))
+;(prn (fast-fibonacci 10000 1 0))
+(fast-fibonacci N 1 0)
+(println "[fast-fibonacci]" (str (time-elapsed start) "s"))
+
+(define start (time))
+(slow-fibonacci N)
+(println "[slow-fibonacci]" (str (time-elapsed start) "s"))
+
+(define N 100000)
+(println "\ncalculating" (str N "-th fibonacci number"))
+(define start (time))
+(fast-fibonacci N 1 0)
+(println "[fast-fibonacci]" (str (time-elapsed start) "s"))
+(println "[slow-fibonacci] ... way too slow")
+
+(println "\ntry it yourself by running (load-file 'examples/fibonacci_definition.plp')")
+(println "and then use it like (println (fast-fibonacci N 1 0))")

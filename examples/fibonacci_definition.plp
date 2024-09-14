@@ -1,0 +1,18 @@
+; it returns n-th fibonacci number
+; default parameters should be
+; curr = 1, prev = 0 since the sequence starts as 0, 1
+(define fast-fibonacci
+  (fn (n curr prev)
+    (if (= n 0)
+      prev
+      (fast-fibonacci (- n 1) (+ curr prev) curr))))
+
+; return n-th fibonacci number
+(define slow-fibonacci
+  (fn (n)
+    (if (= n 0)
+      1
+      (if (= n 1)
+        1
+        (+ (slow-fibonacci (- n 1))
+          (slow-fibonacci (- n 2)))))))

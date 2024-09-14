@@ -1,0 +1,448 @@
+;; prepend function
+(prepend 1 (list))
+;(1)
+(prepend 1 (list 2))
+;(1 2)
+(prepend 1 (list 2 3))
+;(1 2 3)
+(prepend (list 1) (list 2 3))
+;((1) 2 3)
+(prepend 9 3)
+;err!
+
+;; append function
+(append (list 1 2 3) [4])
+;(4 (1 2 3))
+(append (list 2 3) ( list 3 ))
+;(3 (2 3))
+(append 10 9)
+;err!
+
+(define a (list 2 3))
+#<lambda>
+(prepend 1 a)
+;(1 2 3)
+a
+;(2 3)
+
+;; concat function
+(concat)
+;()
+(concat (list 1 2))
+;(1 2)
+(concat (list 1 2) (list 3 4))
+;(1 2 3 4)
+(concat (list 1 2) (list 3 4) (list 5 6))
+;(1 2 3 4 5 6)
+(concat (concat))
+;()
+(concat (list) (list))
+;()
+(= () (concat))
+;true
+(define a (list 1 2))
+;(1 2)
+(define b (list 3 4))
+;(3 4)
+(concat a b (list 5 6))
+;(1 2 3 4 5 6)
+a
+;(1 2)
+b
+;(3 4)
+
+;; quote tests
+(quote 7)
+;7
+(quote (1 2 3))
+;(1 2 3)
+(quote (list 1 2 3))
+;(list 1 2 3)
+(quote (1 2 (3 4)))
+;(1 2 (3 4))
+(= (quote abc) (quote abc))
+;true
+(= (quote abc) (quote abcd))
+;false
+(= (quote abc) "abc")
+;false
+(= "abc" (quote abc))
+;false
+(= "abc" (str (quote abc)))
+;true
+(= (quote abc) nil)
+;false
+(= nil (quote abc))
+;false
+'7
+;7
+'(1 2 3)
+;(1 2 3)
+'(1 2 (3 4))
+;(1 2 (3 4))
+
+;; prepend, concat again
+(prepend 1 [])
+;(1)
+(prepend [1] [2 3])
+;([1] 2 3)
+(prepend 1 [2 3])
+;(1 2 3)
+(concat [1 2] (list 3 4) [5 6])
+;(1 2 3 4 5 6)
+(concat [1 2])
+;(1 2)
+
+;; vec function
+(vec (list))
+;[]
+(vec (list 1))
+;[1]
+(vec (list 1 2))
+;[1 2]
+(vec [])
+;[]
+(vec [1 2])
+;[1 2]
+(define a (list 1 2))
+;(1 2)
+(vec a)
+;[1 2]
+a
+;(1 2)
+
+;; to_vector
+(vector)
+;[]
+(vector 1 2 3)
+;[1 2 3]
+(vector (+ 8 2) (list 1 2))
+;[10 (1 2)]
+
+;; count_items
+(count [1 2 3 4])
+;4
+(count)
+;err!
+(count (list 8))
+;1
+
+;; slurp
+(slurp "tests/slurp.txt")
+;"hello world!"
+(slurp "somerandom")
+;err!
+
+;; nth
+(nth 4 (list 1 2 3))
+;err!
+(nth 2 (list 1 2 3))
+;3
+(nth -2 (list 1 2 3 4 5 6))
+;5
+(nth -1 ())
+;err!
+
+;; first
+(first (list 1 2 3))
+;1
+(first)
+;err!
+(first ())
+;nil
+(first [])
+;nil
+
+;; last
+(last [1 2 (do (define a (- 10 13)) a)])
+;-3
+(last ())
+;nil
+(last)
+;err!
+(last [])
+;nil
+
+(= (last ()) (last []))
+;true
+
+;; take
+(take 2 (list 1 2 3 4 5))
+;(1 2)
+(take 3 [ 1 2 3 4 5 6 ])
+;(1 2 3)
+
+;; split_string
+(split ";" "hello;world")
+;("hello" "world")
+(split "" "abc")
+;("a" "b" "c")
+(split " " "lisp")
+;("lisp")
+
+;; create_range
+(range -1 4)
+;(-1 0 1 2 3)
+(range 3 9 2)
+;(3 5 7)
+(range 11 7)
+;()
+
+;; is_list
+(list? [1 34 ])
+;false
+(list? ())
+;true
+(list? (list 1 24 ))
+;true
+(list? nil)
+;false
+
+;; is_sequence_empty
+(empty? ())
+;true
+(empty? [])
+;true
+(empty? (list 9 41 1))
+;false
+(empty? (vec (list 8 4)))
+;false
+
+;; create-hashmap
+(hash-map "a" 1 "b" 3)
+;{"a" 1 "b" 3}
+(hash-map akof 10)
+;err!
+
+;; assoc
+(assoc {"hello" "world"} "foo" "bar")
+;{"hello" "world" "foo" "bar"}
+(define adef {"hello" "world"})
+;{"hello" "world"}
+(assoc adef "foo" "bar")
+;{"hello" "world" "foo" "bar"}
+adef
+;{"hello" "world"}
+
+;; dissoc
+(dissoc {"foo" "bar" "one" "two" 3 4} "one" "foo")
+;{3 4}
+(dissoc {"hello" "world" 1 2} "foo" 1)
+;{"hello" "world"}
+(dissoc {"some" "hashmap"})
+;{"some" "hashmap"}
+
+;; is_in_hashmap
+(contains? 1 {1 2 3 4})
+;true
+(contains? 4 {3 4})
+;false
+
+;; get_from_hashmap
+(get 1 {1 2 3 4})
+;2
+(get 2 {1 2 3 4})
+;nil
+
+;; get_hashmap_keys
+(keys {1 2 3 4})
+;(1 3)
+(keys {})
+;()
+
+;; get_hashmap_vals
+(vals {1 2 3 4})
+;(2 4)
+(vals {})
+;()
+
+;; get_type
+(type (list 1 2 3))
+;"List"
+(type "ahoj")
+;"String"
+(type adef)
+;"HashMap"
+(type fasfadsf)
+;err!
+(type (time-ms))
+;"Integer"
+
+;; floor
+(floor 8.424424)
+;8
+(floor 10)
+;10
+
+;; join
+(join ", " "hello" "world" "foo")
+;err!
+(join ", " (list "hello" "world" "bar"))
+;"hello, world, bar"
+(join "-" (list 13 9 2024))
+;"13-9-2024"
+(join ", " (list))
+;""
+(join "-" [1 2 3])
+;"1-2-3"
+
+;; asterisk-sign
+(* 3 "hello")
+;"hellohellohello"
+(* 0 "test")
+;""
+(* 1 "single")
+;"single"
+
+(* "string" 3)
+;err!
+(* "string" "another")
+;err!
+(* 2 3 "noway")
+;err!
+
+;; plus-sign
+(+ "foo" "bar")
+;"foobar"
+(+ 4 "foo")
+;err!
+(+ "foo" 4)
+;err!
+
+;; modulo sign
+(% 100 4)
+;0
+(% 4 17)
+;4
+
+;; splice
+(splice 0 5 (list 1 2 3))
+;err!
+(splice -1 2 (list 1 2 3))
+;err!
+(splice 1 -2 (list 1 2 3))
+;()
+(splice 0 -1 (list 1 2 3))
+;(1 2)
+(splice 0 2 [1 2 3])
+;(1 2)
+(splice 3 -8 (range 1 10))
+;err!
+(splice 3 -2 (range 1 10))
+;(4 5 6 7)
+(splice 1 -1 [1 2 3])
+;(2)
+(splice 0 -1 ())
+;err!
+(splice 3 0 (list 84 3 8 2 1))
+;err!
+(splice 1 1 (list 0 2 3 4))
+;()
+(splice 1 2 (list 0 2 3 4))
+;(2)
+(splice 1 3 (list 0 2 3 4))
+;(2 3)
+
+;; testing type checks
+(symbol? +)
+;false
+(define a 4)
+;4
+(symbol? a)
+;false
+(symbol? 'a)
+;true
+(symbol? 'fasdfas)
+;true
+(symbol? 'eval)
+;true
+(symbol? true)
+;false
+
+(nil? nil)
+;true
+(nil? true)
+;false
+(nil? false)
+;false
+(nil? f)
+;err!
+(nil? "")
+;false
+
+(string? nil)
+;false
+(string? "")
+;true
+(string? 4)
+;false
+
+(true? true)
+;true
+(true? false)
+;false
+(true? "fasdf")
+;false
+
+(false? false)
+;true
+(false? true)
+;false
+(false? "")
+;false
+
+(number? "fasdfa")
+;false
+(number? 4292)
+;true
+(number? 4842.4342)
+;true
+
+(int? "fadsf")
+;false
+(int? 49374)
+;true
+(int? 4874.444)
+;false
+
+(float? "Fdsfas")
+;false
+(float? 74082)
+;false
+(float? 7555.444)
+;true
+
+(fn? +)
+;true
+(fn? load-file)
+;true
+(fn? eval)
+;true
+(fn? (fn () "foo"))
+;true
+(fn? (do (fn () "bar")))
+;true
+(fn? ((fn () "bar")))
+;false
+(fn? true)
+;false
+
+(hash-map? {})
+;true
+(hash-map? (list))
+;false
+(hash-map? (hash-map abcdef 10))
+;err!
+(hash-map? (hash-map :a 10))
+;true
+(hash-map? {:a 10})
+;true
+
+(seq? (list))
+;true
+(seq? [4 2 ])
+;true
+(seq? {})
+;false
+(seq? "")
+;false

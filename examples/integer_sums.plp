@@ -1,0 +1,17 @@
+; Integer sums: solutions for a recodex problem
+; https://recodex.mff.cuni.cz/app/assignment/7f590d12-9e5d-4500-b562-f7245d3a8660/user/7c052ff5-6d43-40cb-9ef3-72b13a6604af
+
+; paramter N is integer whose sums we want to print out
+(define integer-sums
+  (fn (k N a)
+    (if (= N 0)
+      (println (str (join "+" a)))
+      (do
+        (define i k)
+        (while (< i (+ N 1))
+          (integer-sums i (- N i) (append i a))
+          (define i (+ i 1)))))))
+
+(define n 6)
+(println "printing all possible ways to get" n "as a sum of integers")
+(integer-sums 1 n ())

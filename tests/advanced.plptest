@@ -1,0 +1,120 @@
+(= [(list)] (list []))
+;true
+(= [1 2 (list 3 4 [5 6])] (list 1 2 [3 4 (list 5 6)]))
+;true
+(= [] ())
+;true
+(= [:a :b] (list :a :b))
+;true
+(= [:a :b] [:a :b :c])
+;false
+(= {:a 1} {:a 1})
+;true
+
+
+;; ovlivnuje to i listy a vectory?
+(= {:a 1} {:b 1})
+;false
+(= {:a (list 1 2 3) :b "foo"} {:a [1 2 3] :b "foo"})
+;true
+(= {:a (list 1 2 3) :b "foo"} {:a [1 2 3] b "foo"})
+;err!
+(define a 20)
+;20
+(= {:a 10} (hash-map (eval a) 10))
+;false
+(= {20 10} (hash-map 20 10))
+;true
+(= {:a 10 :b 20} (hash-map :a 20 :b 10))
+;false
+(= {:a 20 :b 10} (hash-map :a 10 :b 20))
+;false
+(= {:a [1 [2 2] 3] :b 10} (hash-map :a (list 1 [2 2] 3) :b 10))
+;true
+(= {:a [1 2 3]} (hash-map :a (list 1 2 3)))
+;true
+(= {:a [1 2 3]} (hash-map :a (vec (list 1 2 3))))
+;true
+
+{a 10 a 20}
+;err!
+{a 10 :a 20}
+;err!
+{:a 10 :a 20}
+;err!
+{:a 10 :b 20}
+;{:a 10 :b 20}
+{a 10 b}
+;err!
+{:a 10}
+;{:a 10}
+{:a 10 b 20}
+;err!
+
+;; Basic equality
+(= 1 1)
+;true
+(= 0 0)
+;true
+(= 1 0)
+;false
+(= nil nil)
+;true
+(= nil false)
+;false
+(= nil true)
+;false
+(= nil 0)
+;false
+(= nil 1)
+;false
+(= nil "")
+;false
+(= nil ())
+;false
+(= nil [])
+;false
+(= false nil)
+;false
+(= false false)
+;true
+(= false true)
+;false
+(= false 0)
+;false
+(= false 1)
+;false
+(= false "")
+;false
+(= false ())
+;false
+(= true nil)
+;false
+(= true false)
+;false
+(= true true)
+;true
+(= true 0)
+;false
+(= true 1)
+;false
+(= true "")
+;false
+(= true ())
+;false
+(= (list) (list))
+;true
+(= (list) ())
+;true
+(= (list 1 2) (list 1 2))
+;true
+(= (list 1) (list))
+;false
+(= (list) (list 1))
+;false
+(= 0 (list))
+;false
+(= (list) 0)
+;false
+(= (list nil) (list))
+;false

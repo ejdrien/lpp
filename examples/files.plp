@@ -1,0 +1,7 @@
+; try commenting this expression out and the interpret will throw errors because it defines the '!' operator
+(load-file "examples/definitions.plp")
+
+(println "100! =" (! 100))
+
+(println "tests/slurp.txt:" (slurp "tests/slurp.txt"))
+

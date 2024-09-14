@@ -1,0 +1,311 @@
+;; Defining symbols
+(define x 3)
+;3
+x
+;3
+(define x 4)
+;4
+x
+;4
+(define y (+ 1 7))
+;8
+y
+;8
+(define w 123)
+;123
+(define w (abc))
+;err!
+w
+;123
+
+;; Case-sensitivity
+(define mynum 111)
+;111
+(define MYNUM 222)
+;222
+mynum
+;111
+MYNUM
+;222
+
+;; let* environment
+(let* (z 9) z)
+;9
+(let* (x 9) x)
+;9
+x
+;4
+(let* (z (+ 2 3)) (+ 1 z))
+;6
+(let* (p (+ 2 3) q (+ 2 p)) (+ p q))
+;12
+(define y (let* (z 7) z))
+y
+;7
+(define a 4)
+;4
+(let* (q 9) q)
+;9
+(let* (q 9) a)
+;4
+(let* (z 2) (let* (q 9) a))
+;4
+(let* [z 9] z)
+;err!
+(let* [p (+ 2 3) q (+ 2 p)] (+ p q))
+;err!
+(let* (a 5 b 6) [3 4 a [b 7] 8])
+;[3 4 5 [6 7] 8]
+(let* (x 2 x 3) x)
+;3
+
+;; if conditional
+(if true 7 8)
+;7
+(if false 7 8)
+;8
+(if false 7 false)
+;false
+(if true (+ 1 7) (+ 1 8))
+;8
+(if false (+ 1 7) (+ 1 8))
+;9
+(if nil 7 8)
+;8
+(if 0 7 8)
+;7
+(if (list) 7 8)
+;7
+(if (list 1 2 3) 7 8)
+;7
+(= (list) nil)
+;false
+
+;; if conditional without else
+(if false (+ 1 7))
+;nil
+(if nil 8)
+;nil
+(if nil 8 7)
+;7
+(if true (+ 1 7))
+;8
+
+;; anonymous functions invocation
+( (fn (a b) (+ b a)) 3 4)
+;7
+( (fn () 4) )
+;4
+( (fn () ()) )
+;()
+( (fn (f x) (f x)) (fn (a) (+ 1 a)) 7)
+;8
+( ( (fn (a) (fn (b) (+ a b))) 5) 7)
+;12
+
+(define add-10 (fn () (fn (x) (+ x 10))))
+;#<lambda>
+(define surprise (add-10))
+;#<lambda>
+(surprise 0)
+;10
+
+(define barrisimo (fn (x) (fn (y) (+ x y))))
+;#<lambda>
+(define lookito (barrisimo 9))
+;#<lambda>
+(lookito 1)
+;10
+
+;; do testing
+(do (prn 1))
+;nil
+(do (prn 1) 2)
+;2
+(do (prn 1) (prn 2) (+ 3 4))
+;7
+(do (define a 6) 7 (+ a 8))
+;14
+a
+;6
+(define DO (fn (a) 7))
+(DO 3)
+;7
+
+;; recursive function test
+(define sum (fn (N) (if (> N 0) (+ N (sum  (- N 1))) 0)))
+;#<lambda>
+(sum 10)
+;55
+(sum 2)
+;3
+(sum 7)
+;28
+(let* (f (fn () x) x 3) (f))
+;3
+(let* (cst (fn (n) (if (= n 0) nil (cst (- n 1))))) (cst 1))
+;nil
+(let* (f (fn (n) (if (= n 0) 0 (g (- n 1)))) g (fn (n) (f n))) (f 2))
+;0
+
+;; some more string tests
+(if "" 7 8)
+;7
+(= "" "")
+;true
+(= "abc" "abc")
+;true
+(= "abc" "")
+;false
+(= "" "abc")
+;false
+(= "abc" "def")
+;false
+(= "abc" "ABC")
+;false
+(= (list) "")
+;false
+(= "" (list))
+;false
+
+;; not tests
+(not false)
+;true
+(not nil)
+;true
+(not true)
+;false
+(not "a")
+;false
+(not 0)
+;false
+
+;; string operations
+""
+;""
+"abc"
+;"abc"
+"abc  def"
+;"abc  def"
+"\""
+;"\""
+"abc\ndef\nghi"
+;"abc\ndef\nghi"
+"abc\\def\\ghi"
+;"abc\\def\\ghi"
+"\\n"
+;"\\n"
+(pr-str)
+;""
+(pr-str "")
+;"\"\""
+(pr-str "abc")
+;"\"abc\""
+(pr-str "abc  def" "ghi jkl")
+;"\"abc  def\" \"ghi jkl\""
+(pr-str "\"")
+;"\"\\\"\""
+(pr-str (list 1 2 "abc" "\"") "def")
+;"(1 2 \"abc\" \"\\\"\") \"def\""
+(pr-str "abc\ndef\nghi")
+;"\"abc\\ndef\\nghi\""
+(pr-str "abc\\def\\ghi")
+;"\"abc\\\\def\\\\ghi\""
+(pr-str (list))
+;"()"
+(str)
+;""
+(str "")
+;""
+(str "abc")
+;"abc"
+(str "\"")
+;"\""
+(str 1 "abc" 3)
+;"1abc3"
+(str "abc  def" "ghi jkl")
+;"abc  defghi jkl"
+(str "abc\ndef\nghi")
+;"abc\ndef\nghi"
+(str "abc\\def\\ghi")
+;"abc\\def\\ghi"
+(str (list 1 2 "abc" "\"") "def")
+;"(1 2 abc \")def"
+(str (list))
+;"()"
+(prn)
+;nil
+(prn "")
+;nil
+(prn "abc")
+;nil
+(prn (list 1 2 "abc" "\"") "def")
+;nil
+(println)
+;nil
+(println "")
+;nil
+(println "abc")
+;nil
+
+;; more keywords
+(= :abc :abc)
+;true
+(= :abc :def)
+;false
+(= :abc ":abc")
+;false
+(= (list :abc) (list :abc))
+;true
+
+;; vectors again
+(if [] 7 8)
+;7
+(pr-str [1 2 "abc" "\""] "def")
+;"[1 2 \"abc\" \"\\\"\"] \"def\""
+(pr-str [])
+;"[]"
+(str [1 2 "abc" "\""] "def")
+;"[1 2 abc \"]def"
+(str [])
+;"[]"
+(count [1 2 3])
+;3
+(empty? [1 2 3])
+;false
+(empty? [])
+;true
+(list? [4 5 6])
+;false
+(= [] (list))
+;true
+(= [7 8] [7 8])
+;true
+(= [:abc] [:abc])
+;true
+(= (list 1 2) [1 2])
+;true
+(= (list 1) [])
+;false
+(= [] [1])
+;false
+(= 0 [])
+;false
+(= [] 0)
+;false
+(= [] "")
+;false
+(= "" [])
+;false
+( (fn [] 4) )
+;err!
+( (fn () 4) )
+;4
+( (fn (f x) [f x]) (fn [a] (+ 1 a)) 7)
+;err!
+( (fn (f x) (f x)) (fn (a) (+ 1 a)) 7)
+;8
+(let* (b 0 f (fn () b)) (let* (b 1) (f)))
+;0
+((let* (b 0) (fn () b)))
+;0

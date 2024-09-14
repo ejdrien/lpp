@@ -1,0 +1,227 @@
+;; Parsing numbers
+1
+;1
+7
+;7
+  7   
+;7
+-123
+;-123
+
+;; Parsing symbols
+-
+;#<function 'number_subtraction'>
+foo
+;err!
+-abc
+;err!
+
+;; Lists
+(+ 1 2)
+;3
+()
+;()
+( )
+;()
+(list nil)
+;(nil)
+(list (3 4))
+;err!
+(list (list 3 4))
+;((3 4))
+(+ 1 (+ 2 3))
+;6
+  ( +   1   (+   2 3   )   )  
+;6
+(* 1 2)
+;2
+(* -3 6)
+;-18
+(list ()())
+;(() ())
+(()())
+;err!
+(())
+;err!
+(list)
+;()
+(list? (list))
+;true
+(list? nil)
+;false
+(empty? (list))
+;true
+(empty? (list 1))
+;false
+(list 1 2 3)
+;(1 2 3)
+(count (list 1 2 3))
+;3
+(count (list))
+;0
+(count nil)
+;0
+(if (> (count (list 1 2 3)) 3) 89 78)
+;78
+(if (>= (count (list 1 2 3)) 3) 89 78)
+;89
+
+;; Test commas as whitespace
+[1 2, 3,,,,],,
+;[1 2 3]
+
+;; Special values
+nil
+;nil
+true
+;true
+false
+;false
+True
+;err!
+
+;; String
+"abc"
+;"abc"
+   "abc"   
+;"abc"
+"abc (with parens)"
+;"abc (with parens)"
+"abc\"def"
+;"abc\"def"
+""
+;""
+"\\"
+;"\\"
+"\\\\\\\\\\\\\\\\\\"
+;"\\\\\\\\\\\\\\\\\\"
+"&"
+;"&"
+"'"
+;"'"
+"<"
+;"<"
+"~"
+;"~"
+"!"
+;"!"
+
+;; Reader errors
+(1 2
+;err!
+[1 2
+;err!
+{"a" 2
+;err!
+"abc
+;err!
+"
+;err!
+"\"
+;err!
+"\\\\\\\\\\\\\\\\\\\"
+;err!
+(1 "abc
+;err!
+(1 "abc"
+;err!
+
+;; Testing keywords
+:kw
+;:kw
+(:kw1 :kw2 :kw3)
+;err!
+[:kw1 :kw2 :kw3]
+;[:kw1 :kw2 :kw3]
+
+;; Testing read of vectors
+[1 2]
+;[1 2]
+[]
+;[]
+[ ]
+;[]
+[nil]
+;[nil]
+[[3 4]]
+;[[3 4]]
+([])
+;err!
+(list [])
+;([])
+
+;; Testing read of hash maps
+{}
+;{}
+{ }
+;{}
+{"abc" 1}
+;{"abc" 1}
+{"a" {"b" 1}}
+;{"a" {"b" 1}}
+{"a" {"b" {"c" 1}}}
+;{"a" {"b" {"c" 1}}}
+{  "a"  {"b"   {  "cde"     3   }  }}
+;{"a" {"b" {"cde" 3}}}
+{"a1" 1 "a2" 2 "a3" 3}
+;{"a1" 1 "a2" 2 "a3" 3}
+{  :a  {:b   {  :cde     3   }  }}
+;{:a {:b {:cde 3}}}
+{"1" 1}
+;{"1" 1}
+(list {})
+;({})
+
+;; Testing comments
+0 ; fsadg ags 
+;0
+0; csdfg sdfg sdfg
+;0
+0; &()*+,-./:;<?@[]^_{|}~
+;0
+
+;; Keyword detection
+a:
+;err!
+:a
+;:a
+:7
+:7
+7:
+;err!
+:()
+;err!
+:""
+;err!
+:"
+;err!
+():
+;err!
+
+;; Arithmetic operations
+(+ 1 2)
+;3
+(+ 5 (* 2 3))
+;11
+(- (+ 5 (* 2 3)) 3)
+;8
+(/ (- (+ 5 (* 2 3)) 3) 4)
+;2.0
+(/ (- (+ 515 (* 87 311)) 302) 27)
+;1010.0
+(* -3 6)
+;-18
+(/ (- (+ 515 (* -87 311)) 296) 27)
+;-994.0
+(abc 1 2 3)
+;err!
+
+;; Arithetmic operations inside vectors and hashmaps
+[1 2 (+ 1 2)]
+;[1 2 3]
+
+{"a" (+ 7 8)}
+;{"a" 15}
+
+{:a (+ 7 8)}
+;{:a 15}

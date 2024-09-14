@@ -1,0 +1,86 @@
+; PLP implementation of a recodex problem
+; https://recodex.mff.cuni.cz/app/assignment/65e610ae-daf5-4bc0-b777-b2548335fabc/user/7c052ff5-6d43-40cb-9ef3-72b13a6604af
+
+(define is-leap-year
+  (fn (year)
+    (if (= 0 (% year 4))
+      (if (= 0 (% year 400))
+        true
+        (if (= 0 (% year 100))
+          false
+          true))
+      false)))
+
+(define get-days-in-year
+  (fn (year)
+    (if (is-leap-year year)
+      366
+      365)))
+
+(define days-in-month
+  {
+    1 31
+    2 '(if (is-leap-year year) 29 28)
+    3 31
+    4 30
+    5 31
+    6 30
+    7 31
+    8 31
+    9 30
+    10 31
+    11 30
+    12 31
+  })
+
+; you need to define the year var beforehand
+; (define year 2023)
+; (println (get-days-in-month 2)) => 28 
+(define get-days-in-month
+  (fn (month)
+    (eval (get month days-in-month))))
+
+(define days-since-beginning-of-year
+  (fn ()
+    (while (< curr_month month)
+      (eval
+        '(define days
+          (+ days (get-days-in-month curr_month))))
+      (eval '(define curr_month (+ curr_month 1))))))
+
+;; -------- edit these numbers -------
+(define day1 17)
+(define month1 2)
+(define year1 1996)
+
+(define day2 13)
+(define month2 9)
+(define year2 2024)
+;; ----------------------------
+
+(define day day1)
+(define month month1)
+(define year year1)
+(define days day)
+(define curr_month 1)
+(days-since-beginning-of-year)
+(define days1 days)
+
+(define day day2)
+(define month month2)
+(define year year2)
+(define days day)
+(define curr_month 1)
+(days-since-beginning-of-year)
+(define days2 days)
+
+(while (< year1 year2)
+  (eval
+    '(define days2
+      (+ days2
+        (get-days-in-year year1))))
+  (define year1 (+ year1 1)))
+
+(println "[first date]" (join ". " (list day1 month1 year1)))
+(println "[second date]" (join ". " (list day2 month2 year2)))
+(println "[difference between dates]" (- days2 days1) "days")
