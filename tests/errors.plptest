@@ -75,3 +75,5 @@
 ;; while
 (while)
 ;err!
+(while true)
+;err!

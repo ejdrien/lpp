@@ -20,7 +20,6 @@
 (define days-in-month
   {
     1 31
-    2 '(if (is-leap-year year) 29 28)
     3 31
     4 30
     5 31
@@ -33,20 +32,24 @@
     12 31
   })
 
-; you need to define the year var beforehand
-; (define year 2023)
-; (println (get-days-in-month 2)) => 28 
 (define get-days-in-month
-  (fn (month)
-    (eval (get month days-in-month))))
+  (fn (month year)
+    (if (= month 2)
+      (if (is-leap-year year)
+        29
+        28)
+      (get month days-in-month))))
 
 (define days-since-beginning-of-year
-  (fn ()
-    (while (< curr_month month)
-      (eval
-        '(define days
-          (+ days (get-days-in-month curr_month))))
-      (eval '(define curr_month (+ curr_month 1))))))
+  (fn (day month year)
+    (do
+      (define days day)
+      (define curr-month 1)
+      (while (< curr-month month)
+        (define days (+ days (get-days-in-month curr-month year)))
+        (define curr-month (+ curr-month 1)))
+      days
+    )))
 
 ;; -------- edit these numbers -------
 (define day1 17)
@@ -58,29 +61,14 @@
 (define year2 2024)
 ;; ----------------------------
 
-(define day day1)
-(define month month1)
-(define year year1)
-(define days day)
-(define curr_month 1)
-(days-since-beginning-of-year)
-(define days1 days)
-
-(define day day2)
-(define month month2)
-(define year year2)
-(define days day)
-(define curr_month 1)
-(days-since-beginning-of-year)
-(define days2 days)
-
-(while (< year1 year2)
-  (eval
-    '(define days2
-      (+ days2
-        (get-days-in-year year1))))
-  (define year1 (+ year1 1)))
+(define days1 (days-since-beginning-of-year day1 month1 year1))
+(define days2 (days-since-beginning-of-year day2 month2 year2))
 
 (println "[first date]" (join ". " (list day1 month1 year1)))
+
+(while (< year1 year2)
+  (define days2 (+ days2 (get-days-in-year year1)))
+  (define year1 (+ year1 1)))
+
 (println "[second date]" (join ". " (list day2 month2 year2)))
 (println "[difference between dates]" (- days2 days1) "days")

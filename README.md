@@ -12,7 +12,7 @@ Projekt obsahuje 3 složky:
 
 A spustitelné soubory `main.py` a `test.py` v hlavním adresáři.
 
-#### Jak to funguje?
+#### Jak to funguje?
 Program načte kód zapsaný v PLP syntaxi, tento text rozdělení na jednotlivé tokeny, které dále podle určitých pravidel naparsuje na čísla, stringy, pole, booleany atd. Z nich vytvořít abstraktní syntatický strom (AST), který následně projde a vykoná jednotlivé operace na daných operandech.
 
 Vzhledem k LISPovské povaze je syntaxe zpracovávána řádku po řádce, resp. výraz poo výrazu. O syntaxi dále v textu.
@@ -88,7 +88,7 @@ hello
 ;"world"
 ```
 
-#### Omezení
+#### Omezení
 Interpet je samozřejmě omezen zadefinovanou funkcionalitou, která není tak obsáhla, neboť projekt byl spíš proof-of-concept.
 
 Všechno zadefinované funguje, jak má, až na hlídání chyb. Program je samozřejmě schopen (téměř[^1]) vždy zachytit chybové chování a ukončí se s chybovou hláskou. Chybové hlášky jsou vesměs vždy správné ohlídané a předají, co špatného se stalo.
@@ -117,7 +117,7 @@ a samozřejmě již zmíněné, lepší chybové hlášky.
 ##### Požadavky
 PLP vyžaduje alespoň (myslím) `Python 3.10+`, ale program byl testován pouze na verzi `3.12.6`. Nevyužívá žádné externí knihovny kromě těch v základní výbavě.
 
-##### Spuštění
+##### Spuštění
 PLP má 2 režimy:
 - načte soubor, přečte jej, zpracuje a případně vypíše potřebné věci do konzole,
 - nebo se načte do tzv. `REPL` režimu `(read-eval-print-loop)`, ve kterém lze krok po kroku vykonávat příkazy.

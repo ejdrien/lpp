@@ -2,12 +2,35 @@
 ;; > my current testing setup doesn't go well with testing while loops
 ;; > therefore the actual output of these tests needs to be checked manually by running
 ;; $ `python3 test.py while.plptest`
+
+
 (define i 0)
-;0
+
 ;; [expect] printed numbers from 0 to 9
-(while (< i 10) (println i) (define i (+ i 1)))
-;nil
+(let* () (while (< i 10) (println i) (define i (+ i 1))))
 i
 ;0
 
-;; TODO: should probably test this more but looks ok haha
+(define a 10)
+(define change-a (fn (n) (define a n)))
+(define define-b (fn (n) (define b n)))
+
+(define i 1)
+i
+;1
+a
+;10
+b
+;err!
+(while (< i 4) (println i) (if (= i 3) (change-a 100)) (define-b 24) (define b 20) (define i (+ i 1)))
+i
+;4
+b
+;err!
+a;
+100
+b
+;err!
+(define-b 13)
+b
+;err!

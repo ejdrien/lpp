@@ -52,9 +52,13 @@ def EVAL(ast: PLPType, env: Env) -> EVAL_RETURN_TYPE:
               ast, env = eval_let(args, env)
               continue
             case "while":
-              eval_while(args, env)
+              pre_while_env = Env(env)
+              eval_while(args, pre_while_env)
+              for key in pre_while_env.data:
+                if key in env.data:
+                  env.set(key, pre_while_env.data[key])
               return plp.Null()
-            # quoting is kinda broken, it rises from the reader implementation
+            # quoting is kinda broken, the cause rises from the reader implementation
             case "quote":
               return args[0]
             case _: pass # to satisfy type-checker
@@ -76,7 +80,7 @@ def EVAL(ast: PLPType, env: Env) -> EVAL_RETURN_TYPE:
 
 def eval_define(args: list[PLPType], env: Env) -> EVAL_RETURN_TYPE:
   if len(args) != 2:
-    raise SyntaxError(f"'define' expects 2 arguments (got {len(args)})")
+    raise SyntaxError(f"operator 'define' expects 2 arguments (got {len(args)})")
 
   key = args[0]
   if isinstance(key, plp.Symbol):
@@ -145,7 +149,6 @@ def eval_while(args: list[PLPType], env: Env):
     raise SyntaxError(f"operator 'while' expects at least 2 arguments (got {(len(args))})")
   
   while_condition = args[0]
-  while_env = Env(env)
-  while plp.is_defined_or_true(EVAL(while_condition, while_env)):
+  while plp.is_defined_or_true(EVAL(while_condition, env)):
     for expr in args[1:]:
-      EVAL(expr, while_env)
+      EVAL(expr, env)

@@ -189,6 +189,8 @@ a ; -> chybová hláška: 'a' neexistuje
 
 ##### `'`
 Funkce `'` neboli `quote` je vlastní LISPu. Jako argument bere nějaký výraz, který ale nevyvolá a vrací jeho podobu pro pozdější užití. Samo o sobě to není moc užitečné. Unikátnost a výhoda `quote` se ukazuje až v kombinaci s `quasiquote`, `unquote`, `def-macro` atd., což jsou funkce, které bohužel nejsou přítomny v PLP. Tato featura byla přidána jen jako proof-of-concept.
+
+V PLP jde `quote` výraz vyvolat pouze užitím funkce `eval`, která však pracuje v globálním prostředí, tedy některá funkcionalita, jako je používání parametrů ve funkci, nebude fungovat.
 ```lisp
 '(+ 1 2 3) -> (+ 1 2 3)
 (define a '(+ 1 2 3)) ; -> (+ 1 2 3)
@@ -201,7 +203,7 @@ a ; -> (+ 1 2 3)
 ```
 
 ##### `while`
-Klasický `while` loop, který má však jednu nevýhodu – pracuje ve vlastním prostředí, tedy není schopný zevnitř nadefinovat nové proměnné, které by šly později použít. *(Tato komplikace je zřetelná v `examples/year.plp`.)*
+Klasický `while` loop, který je schopný přepisovat vnější proměnné – jen pokud již byly zadefinované. Nově zadefinované budou použitelné pouze uvnitř daného `while` loopu a po jeho skončení zaniknou.
 
 Argumenty `(condition)` a `(expr1)` jsou povinné, další jsou volitelné. Je-li `(condition)` pravdivá, spustí se `(expr1)`, `(expr2)`, ... popořadě. Na konci se znovu přehodnotí `(condition)`, dokud nepřestane být pravdivá. Sám o sobě vrací `nil`
 ```lisp
@@ -214,12 +216,19 @@ Argumenty `(condition)` a `(expr1)` jsou povinné, další jsou volitelné. Je-l
   (while (< i 11)
     (println i)
     (define i (+ i 1))))
-; vypíše každé číslo od 1 do 10 (včetně), ale 'i' zůstane po skončení nepozměněná
+; vypíše každé číslo od 1 do 4 (včetně), ale 'i' zůstane po skončení nepozměněná
 (define i 1)
-(while (< i 11)
+(let* ()
+  (while (< i 5)
+    (println i)
+    (define i (+ i 1))))
+i ; -> 1
+; vypíše každé číslo od 1 do 4 (včetně), ale 'i' po skončení bude pozměněné
+(define i 1)
+(while (< i 5)
   (println i)
   (define i (+ i 1)))
-i ; -> 1
+i ; -> 5
 ```
 
 #### Další předdefinované funkce

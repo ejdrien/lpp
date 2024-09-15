@@ -96,6 +96,7 @@ def run_tests(file_name: str) -> tuple[int, int, list[tuple[str, str, str]]]:
         try:
           result: str = str(test(code))
           print(GREEN, f"[executed]  {code} -> {result}", RESET)
+          i -= 1
         except Exception as e:
           print(RED, f"[execution failed]  {code} -> {repr(e)}", RESET)
 
